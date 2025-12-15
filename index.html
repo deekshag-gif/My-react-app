@@ -5,6 +5,16 @@
 <title>Happy Birthday 💖</title>
 
 <style>
+    .flower{
+ position:fixed;
+ top:-5vh;
+ font-size:24px;
+ animation:fall 8s linear infinite;
+}
+
+@keyframes fall{
+ to{transform:translateY(110vh);}
+}
 body{
     margin:0;
     font-family:'Segoe UI',sans-serif;
@@ -125,6 +135,19 @@ for(let i=0;i<25;i++){
  document.body.appendChild(f);
 }
 </script>
+function flowers(){
+ for(let i=0;i<25;i++){
+  let f=document.createElement("div");
+  f.className="flower";
+  f.innerText="🌸";
+  f.style.left=Math.random()*100+"vw";
+  f.style.animationDelay = Math.random()*5 + "s";
+  document.body.appendChild(f);
+
+  setTimeout(()=>f.remove(),8000);
+ }
+}
+</script>
 
 <!-- 1️⃣ Welcome -->
 <div class="section active" id="welcome">
@@ -139,6 +162,8 @@ for(let i=0;i<25;i++){
 <div class="cake" onclick="crackers(); next('memories')">🎂</div>
 <p>Tap the cake 🎉</p>
 </div>
+     flowers();
+ </div>
 
 <!-- 3️⃣ Memories -->
 <div class="section" id="memories">
