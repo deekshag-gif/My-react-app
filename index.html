@@ -13,9 +13,20 @@ body{
  color:white;
  overflow:hidden;
 }
-.section{display:none;padding:40px 20px;}
+
+.section{
+ display:none;
+ padding:40px 20px;
+}
 .active{display:block;}
-h1{font-size:34px;text-shadow:0 0 15px rgba(255,255,255,.6);}
+
+h1{
+ font-size:34px;
+ text-shadow:0 0 15px rgba(255,255,255,.6);
+}
+
+p{font-size:18px;}
+
 button{
  padding:14px 30px;
  font-size:18px;
@@ -25,10 +36,11 @@ button{
  color:white;
  cursor:pointer;
  margin-top:25px;
+ box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
 button:hover{background:#e63950}
 
-/* Flowers */
+/* 🌸 Flowers */
 .flower{
  position:fixed;
  top:-5vh;
@@ -38,11 +50,11 @@ button:hover{background:#e63950}
 }
 @keyframes fall{
  0%{transform:translateY(-10vh) scale(0);opacity:0}
- 30%{opacity:1}
+ 30%{opacity:1;transform:scale(1)}
  100%{transform:translateY(110vh) rotate(360deg)}
 }
 
-/* Crackers */
+/* 🎆 Crackers */
 .spark{
  position:absolute;
  width:6px;
@@ -55,30 +67,31 @@ button:hover{background:#e63950}
  to{transform:scale(3);opacity:0}
 }
 
-/* Cake */
+/* 🎂 Cake */
 .cake{
  font-size:120px;
  cursor:pointer;
  animation:pulse 1.2s infinite;
 }
 @keyframes pulse{
- 0%,100{transform:scale(1)}
+ 0%,100%{transform:scale(1)}
  50%{transform:scale(1.1)}
 }
 
-/* Memory */
+/* 💭 Memory */
 .memory{
  font-size:22px;
  margin:25px auto;
  max-width:520px;
- animation:fadeUp 2s;
+ min-height:120px;
+ animation:fadeUp 1.5s;
 }
 @keyframes fadeUp{
  from{opacity:0;transform:translateY(30px)}
  to{opacity:1;transform:translateY(0)}
 }
 
-/* Wish */
+/* 💖 Wish */
 .wish{
  font-size:23px;
  line-height:1.7;
@@ -93,53 +106,75 @@ button:hover{background:#e63950}
 
 <body>
 
-<audio autoplay loop>
+<!-- 🎵 Music -->
+<audio id="bgMusic" loop>
  <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Welcome -->
+<!-- 1️⃣ Welcome -->
 <div class="section active" id="welcome">
  <h1>🎉 Welcome My Beautiful Bestie 💖</h1>
  <p>A magical birthday surprise just for you ✨</p>
- <button onclick="flowers(); next('cake')">Open Surprise 🎁</button>
+ <button onclick="startSurprise()">Open Surprise 🎁</button>
 </div>
 
-<!-- Cake -->
+<!-- 2️⃣ Cake -->
 <div class="section" id="cake">
  <h1>🎂 Cut Your Birthday Cake</h1>
- <div class="cake" onclick="crackers(); flowers(); next('memories')">🎂</div>
+ <div class="cake" onclick="cakeClicked()">🎂</div>
  <p>Tap the cake 🎉</p>
 </div>
 
-<!-- Memories -->
+<!-- 3️⃣ Memories -->
 <div class="section" id="memories">
  <h1>💭 Our Sweet Memories</h1>
  <div class="memory" id="memoryText"></div>
  <button onclick="next('wish')">Final Surprise 💖</button>
 </div>
 
-<!-- Wish -->
+<!-- 4️⃣ Wish -->
 <div class="section" id="wish">
  <h1>🎉 Happy Birthday Shifa 🎉</h1>
  <div class="wish">
-  May your smile always shine brighter than stars ✨<br><br>
-  Thank you for being my best friend 🤍<br><br>
-  Stay blessed, stay loved 🫶🎂
+  May your smile always shine brighter than stars ✨  
+  <br><br>
+  Thank you for being my best friend,  
+  my happiness and my forever memory 🤍  
+  <br><br>
+  Stay blessed, stay loved, stay YOU 🫶🎂
  </div>
 </div>
 
 <script>
+/* 🎵 Start Music + Flowers */
+function startSurprise(){
+ document.getElementById("bgMusic").play();
+ flowers();
+ next('cake');
+}
+
+/* 🎂 Cake Click */
+function cakeClicked(){
+ crackers();
+ flowers();
+ next('memories');
+ startMemories();
+}
+
+/* 🌸 Flowers */
 function flowers(){
  for(let i=0;i<25;i++){
   let f=document.createElement("div");
   f.className="flower";
   f.innerText="🌸";
   f.style.left=Math.random()*100+"vw";
+  f.style.animationDelay=Math.random()*5+"s";
   document.body.appendChild(f);
   setTimeout(()=>f.remove(),8000);
  }
 }
 
+/* 🎆 Crackers */
 function crackers(){
  for(let i=0;i<40;i++){
   let s=document.createElement("div");
@@ -152,6 +187,7 @@ function crackers(){
  }
 }
 
+/* 💭 Memories one-by-one */
 let memories=[
 `Hum online mile the,
 pehle toh sirf arguments hi arguments the 😅
@@ -167,22 +203,29 @@ meri strength aur meri smile 😊`,
 `Shifa,
 thank you har time saath dene ke liye,
 aur har chhoti baat pe hasane ke liye 💫`
-
 ];
 
-let i=0;
-function showMemory(){
- document.getElementById("memoryText").innerText=memories[i];
- i++;
- if(i<memories.length) setTimeout(showMemory,2500);
+let memIndex=0;
+function startMemories(){
+ memIndex=0;
+ document.getElementById("memoryText").innerText="";
+ showMemory();
 }
 
+function showMemory(){
+ if(memIndex < memories.length){
+  document.getElementById("memoryText").innerText = memories[memIndex];
+  memIndex++;
+  setTimeout(showMemory,3500);
+ }
+}
+
+/* 🔀 Navigation */
 function next(id){
  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
  document.getElementById(id).classList.add("active");
- if(id==="memories"){ i=0; showMemory(); }
 }
 </script>
 
 </body>
-</html>q
+ </html>
